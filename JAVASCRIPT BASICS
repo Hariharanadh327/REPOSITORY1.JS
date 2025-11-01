@@ -1,0 +1,315 @@
+//chapter 1 --
+/*
+let name = "Sikhakolli Hariharanadh";
+console.log(name);
+r = null;
+console.log(r);
+s = undefined;
+console.log(s);
+isReal = false;
+console.log(isReal);
+name = 233;
+console.log(name);
+// comments
+let Name = "javascript!";
+console.log(Name);
+// block , scope
+{
+let a = 89;
+console.log(a);
+
+}
+{
+    let  b = "Hari";
+    console.log(b);
+}
+console.log(typeof r);
+
+// object penProduct
+const   penProduct = {
+   fullName :"Apsara pen",
+   Color : "Black",
+   Price : 100,
+   Rating : 4,
+   isDeal : true
+}
+console.log(penProduct);
+
+penProduct["Color"] = "White";
+console.log(penProduct["Color"]);
+let price = penProduct.Price + 1;
+console.log(price);
+penProduct.Rating = 3;
+let Rating = penProduct["Rating"] + 2;
+console.log(Rating);
+// SINGLE LINE COMMENT
+/* MULTI LINE COMMENT */
+// chapter 2 --
+//Arthimetic operations 
+/*
+console.log("Arthimetic operations --> +,-,*,/,%");
+let a = 7;
+let b = 88;
+console.log("a + b = ",a+b);
+console.log("a-b = ",a-b);
+console.log("a*b = ",a*b);
+console.log("a/b = ",a/b)
+console.log("a%b = ",a%b);
+// module operator --> %
+{
+    let a  = 6;
+    let b = 3;
+    console.log("a % b = ",a%b);
+    console.log("a / b = ",a/b);
+    // a to the power of b 
+    console.log("a**b = ",a**b);
+
+}
+
+// unary operators --> increment , decrement
+//a++ = a+1 , a-- = a=a-1, ++a,--a
+//post and pre increment and decrement
+//Assignment operators
+console.log("Assignment operators --> +=,-=,*=,/=,%=");
+{
+    let a =5;
+    let b= 4;
+    a +=b;
+    console.log("a = ",a);
+    a -=b;
+    console.log("a = ",a);
+    a *=b;
+    console.log("a = ",a);
+    a /=b;
+    console.log("a = ",a);
+    a %=b;
+    console.log("a = ",a);
+}
+//comparision operators
+console.log("Comparision operators --> ==,!=,===,!==,>,<,<=,>=");
+{
+let a = 5;
+let b = 3;
+console.log("a==b is ",a==b);
+console.log("a!=b is ",a!=b);
+console.log("a===b is ",a===b);
+console.log("a!==b is ",a!==b);
+}
+// logical operators
+console.log("logical operators --> &&,||,!");
+{
+let a = 4;
+let b = 6;
+console.log(a===b && a>0);
+console.log(a>b||a!=0);
+}
+// conditional statements
+console.log("Conditional Statements --> if,else,else if");
+{
+let color;
+let mode = "light";
+if(mode == "Dark"){
+   color = "Black";
+}else{
+    color = "White";
+}
+ console.log(color);
+}
+let age = 16;
+if(age>= 18){
+    console.log("Candidate age is ",age," Eligible to vote");
+}else{
+    console.log("Candidate age is ",age," Not eligible to vote");
+}
+// else if 
+console.log("else if");
+{
+let age = 17;
+if (age>18){
+     console.log("age1 ",age)
+}else if(age==14){
+   console.log("age2 ",age);
+}else if(age==16){
+    console.log("age3 ",age);
+}else{
+    console.log("age4 ",age);
+}
+}
+// Ternary operators
+console.log("Ternary Operators --> a?b:c");
+//if condition of a satisfied execute b else execute c
+let Age = 17;
+let result = Age>=18 ? console.log("Adult") : console.log("Not an Adult");
+ Age = 23;
+result = Age>=18 ? console.log("Adult") : console.log("Not an Adult");
+//switch
+/*
+console.log("Switch Statement");
+const expr = 'Papayas';
+switch (expr) {
+  case 'Oranges':
+    console.log('Oranges are $0.59 a pound.');
+    break;
+  case 'Mangoes':
+  case 'Papayas':
+    console.log('Mangoes and papayas are $2.79 a pound.');
+    // Expected output: "Mangoes and papayas are $2.79 a pound."
+    break;
+  default:
+    console.log(`Sorry, we are out of ${expr}.`);
+}
+*/
+//task1
+/*
+let N = prompt("Enter a number: ");
+if (N%5 == 0){
+    console.log(N," is a multiple of 5");
+
+} else {
+    console.log(N," is not a multiple of 5");
+}
+    */
+//task2
+/*
+let Grade;
+let Marks = prompt("Enter your Marks: ");
+if(Marks>=90 && Marks<=100){
+   Grade = "A";
+}else if(Marks>=80 && Marks<=89){
+   Grade = "B";
+}else if(Marks>=70 && Marks<=79){
+   Grade = "C";
+}else if(Marks>=60 && Marks<=69){
+    Grade = "D";
+}else if(Marks>=50 && Marks<=59){
+    Grade = "E";
+}else{
+    Grade = "F";
+}
+console.log("according to your "+Marks+" , your garde was: ",Grade);
+*/
+// chapter 3 -- loops 
+
+for(let i=0;i<5;i++){
+    console.log(i);
+}
+console.log("Loop has ended");
+
+// sum of 1 to 10
+let sum = 0;
+for(let i=1;i<=1000;i++){
+   sum = sum+i;
+}
+console.log("sum of the first 10 natural numbers: ",sum);
+console.log("Loop has ended");
+
+console.log("for loop");
+
+for(var i=0;i<8;i++){
+    console.log(i);
+}
+console.log(i);
+
+// infinite loop  --> loop that never ends
+/*
+for(let i=1;i>=0;i++){
+    console.log(i);
+}
+*/
+// while loop
+console.log("While loop");
+{let i=1;
+while(i<=5){
+    console.log(i);
+    i++;
+}
+}
+// Do while loop
+{
+   console.log("do while loop");
+let i=1;
+do{
+    console.log(i);
+    i++;
+} while(i<=5);
+}
+// for-of loop
+console.log("for-of loop");
+let Str = "Harinadh";
+let length =0;
+for(let ch of Str){
+    console.log(ch);
+    length = length+1;
+}
+console.log("Length of the Str: ",length);
+//for-in loop
+console.log("for-in loop");
+{
+    let Employee = {
+        Name : "Harinadh",
+        Age : 22,
+        Role : "Developer",
+        salary : 42000,
+    };
+    // key in object (Employee)
+    for(let key in Employee){
+      console.log("key: ",key);
+    }
+    // value in object(Employee)
+    for(let value in Employee){
+        console.log("value :",value);
+    }
+    // key, value in object(Employee)
+    for(key in Employee){
+        console.log("key: ",key,", value :",Employee[key]);
+    }
+}
+//task using for loop
+{
+console.log("print all the even numbers in the range(1,100)");
+let count=0;
+  for(let i=0;i<=100;i++){
+    if(i%2==0){
+        console.log(i);
+        count=count+1;
+    }
+  }
+  console.log("count : ",count);
+}
+
+// task 2 --Ask the user to keep guessing the number until user enters correct number
+/*
+{
+    console.log("--- Number Guessing game ---");
+let Num = 3;
+while(Num>=0){
+let Guess_Num = prompt("Give your answer : ");
+if (Guess_Num == Num){
+    console.log("Hurrah! you guesses the correct number ",Num);
+    break;
+} else{
+    i++;
+}
+   }
+}
+*/
+//
+/*
+let Number = 4;
+User_Number = prompt("Enter the Number: ");
+while(Number!=User_Number){
+     User_Number = prompt("you entered the wrong number, try again!");
+}
+console.log("Hurra   h, you entered the correct number: ",Number);
+*/
+// Strings in JavaScript
+
+let String = "Hariharanadh";
+console.log(String);
+let x = String.length;
+console.log(x);
+// string slicing
+console.log(String[1]);
+
+
+
