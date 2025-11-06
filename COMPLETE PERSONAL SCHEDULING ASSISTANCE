@@ -1,0 +1,1400 @@
+COMPLETE PERSONAL SCHEDULING ASSISTANT APPLICATION
+==================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Frontend - Web Application (HTML, CSS, JavaScript)
+2. Backend - Java Spring Boot REST API
+3. Mobile App - React Native
+4. Setup Instructions
+
+
+==================================================
+SECTION 1: FRONTEND - WEB APPLICATION
+==================================================
+
+This section contains three files: index.html, styles.css, and app.js
+
+--------------------------------------------------
+FILE: index.html
+--------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Scheduling Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ðŸ“… Personal Scheduling Assistant</h1>
+            <p class="subtitle">Manage your tasks efficiently</p>
+        </header>
+
+        <!-- Add Task Form -->
+        <section class="add-task-section">
+            <h2>Add New Task</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="title">Task Title *</label>
+                    <input type="text" id="title" required placeholder="Enter task title">
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" rows="3" placeholder="Enter task description"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateTime">Date & Time *</label>
+                        <input type="datetime-local" id="dateTime" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Work">Work</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Health">Health</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </form>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Tasks</button>
+                <button class="filter-btn" data-filter="today">Today</button>
+                <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+            
+            <div class="category-filter">
+                <label for="categoryFilter">Filter by Category:</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Health">Health</option>
+                    <option value="Fitness">Fitness</option>
+                    <option value="Education">Education</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Tasks Display -->
+        <section class="tasks-section">
+            <h2>Your Tasks</h2>
+            <div id="tasksList" class="tasks-list">
+                <!-- Tasks will be dynamically inserted here -->
+            </div>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <p>No tasks found. Add your first task to get started!</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Task</h2>
+            <form id="editTaskForm">
+                <input type="hidden" id="editTaskId">
+                <div class="form-group">
+                    <label for="editTitle">Task Title *</label>
+                    <input type="text" id="editTitle" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <textarea id="editDescription" rows="3"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editDateTime">Date & Time *</label>
+                        <input type="datetime-local" id="editDateTime" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editCategory">Category *</label>
+                        <select id="editCategory" required>
+                            <option value="Work">Work</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Health">Health</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Update Task</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+
+--------------------------------------------------
+FILE: styles.css
+--------------------------------------------------
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #50C878;
+    --danger-color: #E74C3C;
+    --warning-color: #F39C12;
+    --dark-color: #2C3E50;
+    --light-color: #ECF0F1;
+    --text-color: #34495E;
+    --border-color: #BDC3C7;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--light-color);
+}
+
+header h1 {
+    color: var(--dark-color);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.add-task-section {
+    background: var(--light-color);
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.add-task-section h2 {
+    color: var(--dark-color);
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #357ABD;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-success {
+    background: var(--secondary-color);
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.btn-success:hover {
+    background: #45B869;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.btn-danger:hover {
+    background: #C0392B;
+}
+
+.btn-edit {
+    background: var(--warning-color);
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.btn-edit:hover {
+    background: #E67E22;
+}
+
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    background: white;
+    color: var(--primary-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.category-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-filter label {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.category-filter select {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.tasks-section h2 {
+    color: var(--dark-color);
+    margin-bottom: 20px;
+}
+
+.tasks-list {
+    display: grid;
+    gap: 15px;
+}
+
+.task-card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.task-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.task-card.completed {
+    opacity: 0.7;
+    border-left-color: var(--secondary-color);
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.task-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.task-title.completed {
+    text-decoration: line-through;
+}
+
+.task-category {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.task-description {
+    color: var(--text-color);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.task-datetime {
+    color: var(--text-color);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.task-datetime::before {
+    content: "ðŸ•’";
+}
+
+.task-actions {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    color: var(--text-color);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: var(--danger-color);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-buttons {
+        justify-content: center;
+    }
+
+    .task-card {
+        flex-direction: column;
+    }
+
+    .task-actions {
+        flex-direction: row;
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .task-actions button {
+        flex: 1;
+    }
+}
+
+.task-card[data-category="Work"] {
+    border-left-color: #3498DB;
+}
+
+.task-card[data-category="Personal"] {
+    border-left-color: #9B59B6;
+}
+
+.task-card[data-category="Health"] {
+    border-left-color: #E74C3C;
+}
+
+.task-card[data-category="Fitness"] {
+    border-left-color: #2ECC71;
+}
+
+.task-card[data-category="Education"] {
+    border-left-color: #F39C12;
+}
+
+.task-card[data-category="Other"] {
+    border-left-color: #95A5A6;
+}
+
+
+--------------------------------------------------
+FILE: app.js
+--------------------------------------------------
+
+// Task Manager Class
+class TaskManager {
+    constructor() {
+        this.tasks = this.loadTasks();
+        this.currentFilter = 'all';
+        this.currentCategory = 'all';
+        this.init();
+    }
+
+    init() {
+        this.renderTasks();
+        this.attachEventListeners();
+    }
+
+    loadTasks() {
+        const tasks = localStorage.getItem('schedulingTasks');
+        return tasks ? JSON.parse(tasks) : [];
+    }
+
+    saveTasks() {
+        localStorage.setItem('schedulingTasks', JSON.stringify(this.tasks));
+    }
+
+    addTask(task) {
+        const newTask = {
+            id: Date.now(),
+            title: task.title,
+            description: task.description,
+            dateTime: task.dateTime,
+            category: task.category,
+            completed: false,
+            createdAt: new Date().toISOString()
+        };
+        this.tasks.push(newTask);
+        this.saveTasks();
+        this.renderTasks();
+    }
+
+    updateTask(id, updatedTask) {
+        const index = this.tasks.findIndex(task => task.id === id);
+        if (index !== -1) {
+            this.tasks[index] = { ...this.tasks[index], ...updatedTask };
+            this.saveTasks();
+            this.renderTasks();
+        }
+    }
+
+    deleteTask(id) {
+        this.tasks = this.tasks.filter(task => task.id !== id);
+        this.saveTasks();
+        this.renderTasks();
+    }
+
+    toggleComplete(id) {
+        const task = this.tasks.find(task => task.id === id);
+        if (task) {
+            task.completed = !task.completed;
+            this.saveTasks();
+            this.renderTasks();
+        }
+    }
+
+    filterTasks() {
+        let filtered = [...this.tasks];
+        const now = new Date();
+
+        if (this.currentFilter === 'today') {
+            filtered = filtered.filter(task => {
+                const taskDate = new Date(task.dateTime);
+                return taskDate.toDateString() === now.toDateString();
+            });
+        } else if (this.currentFilter === 'upcoming') {
+            filtered = filtered.filter(task => {
+                const taskDate = new Date(task.dateTime);
+                return taskDate > now && !task.completed;
+            });
+        } else if (this.currentFilter === 'completed') {
+            filtered = filtered.filter(task => task.completed);
+        }
+
+        if (this.currentCategory !== 'all') {
+            filtered = filtered.filter(task => task.category === this.currentCategory);
+        }
+
+        filtered.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+
+        return filtered;
+    }
+
+    renderTasks() {
+        const tasksList = document.getElementById('tasksList');
+        const emptyState = document.getElementById('emptyState');
+        const filtered = this.filterTasks();
+
+        if (filtered.length === 0) {
+            tasksList.style.display = 'none';
+            emptyState.style.display = 'block';
+            return;
+        }
+
+        tasksList.style.display = 'grid';
+        emptyState.style.display = 'none';
+        tasksList.innerHTML = '';
+
+        filtered.forEach(task => {
+            const taskCard = this.createTaskCard(task);
+            tasksList.appendChild(taskCard);
+        });
+    }
+
+    createTaskCard(task) {
+        const card = document.createElement('div');
+        card.className = `task-card ${task.completed ? 'completed' : ''}`;
+        card.setAttribute('data-category', task.category);
+
+        const dateTime = new Date(task.dateTime);
+        const formattedDateTime = dateTime.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        card.innerHTML = `
+            <div class="task-info">
+                <div class="task-header">
+                    <h3 class="task-title ${task.completed ? 'completed' : ''}">${task.title}</h3>
+                    <span class="task-category">${task.category}</span>
+                </div>
+                <p class="task-description">${task.description || 'No description'}</p>
+                <div class="task-datetime">${formattedDateTime}</div>
+            </div>
+            <div class="task-actions">
+                <button class="btn btn-success" onclick="taskManager.toggleComplete(${task.id})">
+                    ${task.completed ? 'â†©ï¸ Undo' : 'âœ“ Complete'}
+                </button>
+                <button class="btn btn-edit" onclick="taskManager.openEditModal(${task.id})">
+                    âœï¸ Edit
+                </button>
+                <button class="btn btn-danger" onclick="taskManager.deleteTask(${task.id})">
+                    ðŸ—‘ï¸ Delete
+                </button>
+            </div>
+        `;
+
+        return card;
+    }
+
+    openEditModal(id) {
+        const task = this.tasks.find(task => task.id === id);
+        if (!task) return;
+
+        document.getElementById('editTaskId').value = task.id;
+        document.getElementById('editTitle').value = task.title;
+        document.getElementById('editDescription').value = task.description || '';
+        document.getElementById('editDateTime').value = task.dateTime;
+        document.getElementById('editCategory').value = task.category;
+
+        document.getElementById('editModal').style.display = 'block';
+    }
+
+    attachEventListeners() {
+        document.getElementById('taskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const task = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                dateTime: document.getElementById('dateTime').value,
+                category: document.getElementById('category').value
+            };
+            this.addTask(task);
+            e.target.reset();
+        });
+
+        document.getElementById('editTaskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('editTaskId').value);
+            const updatedTask = {
+                title: document.getElementById('editTitle').value,
+                description: document.getElementById('editDescription').value,
+                dateTime: document.getElementById('editDateTime').value,
+                category: document.getElementById('editCategory').value
+            };
+            this.updateTask(id, updatedTask);
+            document.getElementById('editModal').style.display = 'none';
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.currentFilter = e.target.getAttribute('data-filter');
+                this.renderTasks();
+            });
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            this.currentCategory = e.target.value;
+            this.renderTasks();
+        });
+
+        document.querySelector('.close').addEventListener('click', () => {
+            document.getElementById('editModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('editModal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+}
+
+const taskManager = new TaskManager();
+
+
+==================================================
+SECTION 2: BACKEND - JAVA SPRING BOOT REST API
+==================================================
+
+PROJECT STRUCTURE:
+------------------
+scheduling-assistant-backend/
+â”œâ”€â”€ src/main/java/com/scheduler/
+â”‚   â”œâ”€â”€ SchedulingAssistantApplication.java
+â”‚   â”œâ”€â”€ controller/
+â”‚   â”‚   â””â”€â”€ TaskController.java
+â”‚   â”œâ”€â”€ model/
+â”‚   â”‚   â””â”€â”€ Task.java
+â”‚   â”œâ”€â”€ repository/
+â”‚   â”‚   â””â”€â”€ TaskRepository.java
+â”‚   â””â”€â”€ service/
+â”‚       â””â”€â”€ TaskService.java
+â”œâ”€â”€ src/main/resources/
+â”‚   â””â”€â”€ application.properties
+â””â”€â”€ pom.xml
+
+
+--------------------------------------------------
+FILE: pom.xml
+--------------------------------------------------
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.scheduler</groupId>
+    <artifactId>scheduling-assistant</artifactId>
+    <version>1.0.0</version>
+    <name>Scheduling Assistant API</name>
+
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
+--------------------------------------------------
+FILE: SchedulingAssistantApplication.java
+--------------------------------------------------
+
+package com.scheduler;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SchedulingAssistantApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SchedulingAssistantApplication.class, args);
+    }
+}
+
+
+--------------------------------------------------
+FILE: Task.java (Model)
+--------------------------------------------------
+
+package com.scheduler.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "tasks")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Task {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @NotBlank(message = "Title is required")
+    @Column(nullable = false)
+    private String title;
+    
+    @Column(columnDefinition = "TEXT")
+    private String description;
+    
+    @NotNull(message = "Date and time is required")
+    @Column(nullable = false)
+    private LocalDateTime dateTime;
+    
+    @NotBlank(message = "Category is required")
+    @Column(nullable = false)
+    private String category;
+    
+    @Column(nullable = false)
+    private boolean completed = false;
+    
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+}
+
+
+--------------------------------------------------
+FILE: TaskRepository.java
+--------------------------------------------------
+
+package com.scheduler.repository;
+
+import com.scheduler.model.Task;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Repository
+public interface TaskRepository extends JpaRepository<Task, Long> {
+    
+    List<Task> findByCategory(String category);
+    
+    List<Task> findByCompleted(boolean completed);
+    
+    @Query("SELECT t FROM Task t WHERE t.dateTime >= :start AND t.dateTime <= :end ORDER BY t.dateTime")
+    List<Task> findTasksBetweenDates(LocalDateTime start, LocalDateTime end);
+    
+    @Query("SELECT t FROM Task t WHERE t.dateTime >= :now AND t.completed = false ORDER BY t.dateTime")
+    List<Task> findUpcomingTasks(LocalDateTime now);
+    
+    List<Task> findAllByOrderByDateTimeAsc();
+}
+
+
+--------------------------------------------------
+FILE: TaskService.java
+--------------------------------------------------
+
+package com.scheduler.service;
+
+import com.scheduler.model.Task;
+import com.scheduler.repository.TaskRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@Transactional
+public class TaskService {
+    
+    @Autowired
+    private TaskRepository taskRepository;
+    
+    public List<Task> getAllTasks() {
+        return taskRepository.findAllByOrderByDateTimeAsc();
+    }
+    
+    public Optional<Task> getTaskById(Long id) {
+        return taskRepository.findById(id);
+    }
+    
+    public Task createTask(Task task) {
+        return taskRepository.save(task);
+    }
+    
+    public Task updateTask(Long id, Task taskDetails) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+        
+        task.setTitle(taskDetails.getTitle());
+        task.setDescription(taskDetails.getDescription());
+        task.setDateTime(taskDetails.getDateTime());
+        task.setCategory(taskDetails.getCategory());
+        task.setCompleted(taskDetails.isCompleted());
+        
+        return taskRepository.save(task);
+    }
+    
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
+    
+    public Task toggleTaskCompletion(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+        task.setCompleted(!task.isCompleted());
+        return taskRepository.save(task);
+    }
+    
+    public List<Task> getTasksByCategory(String category) {
+        return taskRepository.findByCategory(category);
+    }
+    
+    public List<Task> getCompletedTasks() {
+        return taskRepository.findByCompleted(true);
+    }
+    
+    public List<Task> getUpcomingTasks() {
+        return taskRepository.findUpcomingTasks(LocalDateTime.now());
+    }
+    
+    public List<Task> getTodaysTasks() {
+        LocalDateTime startOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+        LocalDateTime endOfDay = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+        return taskRepository.findTasksBetweenDates(startOfDay, endOfDay);
+    }
+}
+
+
+--------------------------------------------------
+FILE: TaskController.java
+--------------------------------------------------
+
+package com.scheduler.controller;
+
+import com.scheduler.model.Task;
+import com.scheduler.service.TaskService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/tasks")
+@CrossOrigin(origins = "*")
+public class TaskController {
+    
+    @Autowired
+    private TaskService taskService;
+    
+    @GetMapping
+    public ResponseEntity<List<Task>> getAllTasks() {
+        return ResponseEntity.ok(taskService.getAllTasks());
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
+        return taskService.getTaskById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @PostMapping
+    public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
+        Task createdTask = taskService.createTask(task);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @Valid @RequestBody Task task) {
+        try {
+            Task updatedTask = taskService.updateTask(id, task);
+            return ResponseEntity.ok(updatedTask);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<Task> toggleTaskCompletion(@PathVariable Long id) {
+        try {
+            Task task = taskService.toggleTaskCompletion(id);
+            return ResponseEntity.ok(task);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Task>> getTasksByCategory(@PathVariable String category) {
+        return ResponseEntity.ok(taskService.getTasksByCategory(category));
+    }
+    
+    @GetMapping("/completed")
+    public ResponseEntity<List<Task>> getCompletedTasks() {
+        return ResponseEntity.ok(taskService.getCompletedTasks());
+    }
+    
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Task>> getUpcomingTasks() {
+        return ResponseEntity.ok(taskService.getUpcomingTasks());
+    }
+    
+    @GetMapping("/today")
+    public ResponseEntity<List<Task>> getTodaysTasks() {
+        return ResponseEntity.ok(taskService.getTodaysTasks());
+    }
+}
+
+
+--------------------------------------------------
+FILE: application.properties
+--------------------------------------------------
+
+# Server Configuration
+server.port=8080
+
+# H2 Database Configuration (Development)
+spring.datasource.url=jdbc:h2:mem:schedulerdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+# JPA Configuration
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# MySQL Configuration (Production - uncomment when ready)
+# spring.datasource.url=jdbc:mysql://localhost:3306/schedulerdb
+# spring.datasource.username=root
+# spring.datasource.password=your_password
+# spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+
+
+==================================================
+SECTION 3: MOBILE APP - REACT NATIVE
+==================================================
+
+SETUP COMMANDS:
+---------------
+npx react-native init SchedulingAssistant
+cd SchedulingAssistant
+npm install @react-navigation/native @react-navigation/stack
+npm install react-native-screens react-native-safe-area-context
+npm install @react-native-async-storage/async-storage
+npm install react-native-date-picker
+npm install axios
+
+
+--------------------------------------------------
+FILE: App.js (Root)
+--------------------------------------------------
+
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './src/screens/HomeScreen';
+import AddTaskScreen from './src/screens/AddTaskScreen';
+import EditTaskScreen from './src/screens/EditTaskScreen';
+
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#4A90E2',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}>
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{ title: 'My Tasks' }}
+        />
+        <Stack.Screen 
+          name="AddTask" 
+          component={AddTaskScreen} 
+          options={{ title: 'Add New Task' }}
+        />
+        <Stack.Screen 
+          name="EditTask" 
+          component={EditTaskScreen} 
+          options={{ title: 'Edit Task' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+
+--------------------------------------------------
+FILE: src/api/taskApi.js
+--------------------------------------------------
+
+import axios from 'axios';
+
+// Change this to your backend URL
+// For Android emulator: http://10.0.2.2:8080/api/tasks
+// For iOS simulator: http://localhost:8080/api/tasks
+// For real device: Use your computer's IP address
+const API_BASE_URL = 'http://localhost:8080/api/tasks';
+
+export const taskApi = {
+  getAllTasks: async () => {
+    const response = await axios.get(API_BASE_URL);
+    return response.data;
+  },
+
+  getTaskById: async (id) => {
+    const response = await axios.get(`${API_BASE_URL}/${id}`);
+    return response.data;
+  },
+
+  createTask: async (task) => {
+    const response = await axios.post(API_BASE_URL, task);
+    return response.data;
+  },
+
+  updateTask: async (id, task) => {
+    const response = await axios.put(`${API_BASE_URL}/${id}`, task);
+    return response.data;
+  },
+
+  deleteTask: async (id) => {
+    await axios.delete(`${API_BASE_URL}/${id}`);
+  },
+
+  toggleTaskCompletion: async (id) => {
+    const response = await axios.patch(`${API_BASE_URL}/${id}/toggle`);
+    return response.data;
+  },
+
+  getTodaysTasks: async () => {
+    const response = await axios.get(`${API_BASE_URL}/today`);
+    return response.data;
+  },
+
+  getUpcomingTasks: async () => {
+    const response = await axios.get(`${API_BASE_URL}/upcoming`);
+    return response.data;
+  },
+};
+
+
+NOTE: Due to length constraints, the React Native screen files (HomeScreen.js, AddTaskScreen.js, EditTaskScreen.js) are included in the previous markdown file. They contain:
+
+- HomeScreen.js: Main task list view with filtering
+- AddTaskScreen.js: Form to add new tasks  
+- EditTaskScreen.js: Form to edit existing tasks
+
+All screens include full styling and functionality for mobile devices.
+
+
+==================================================
+SECTION 4: SETUP INSTRUCTIONS
+==================================================
+
+FRONTEND (WEB APPLICATION)
+--------------------------
+1. Create a new directory: mkdir scheduling-assistant-web
+2. Create three files: index.html, styles.css, app.js
+3. Copy the code from Section 1 into respective files
+4. Open index.html in your browser
+
+Optional - Serve with web server:
+  - Python: python -m http.server 8000
+  - Node.js: npx http-server
+
+
+BACKEND (JAVA SPRING BOOT)
+---------------------------
+Prerequisites:
+- Java 17 or higher
+- Maven 3.6+
+
+Steps:
+1. Create project structure as shown in Section 2
+2. Copy all Java files and pom.xml
+3. Build: mvn clean install
+4. Run: mvn spring-boot:run
+5. Access API at: http://localhost:8080/api/tasks
+6. H2 Console: http://localhost:8080/h2-console
+
+
+MOBILE APP (REACT NATIVE)
+--------------------------
+Prerequisites:
+- Node.js 14+
+- React Native CLI
+- Android Studio (for Android) / Xcode (for iOS)
+
+Steps:
+1. Run setup commands from Section 3
+2. Create src/screens and src/api directories
+3. Copy all React Native files
+4. Update API URL in taskApi.js for your environment
+5. Run Android: npx react-native run-android
+6. Run iOS: npx react-native run-ios
+
+
+CONNECTING FRONTEND TO BACKEND
+-------------------------------
+Update the TaskManager class in app.js to use fetch API:
+
+1. Change constructor to include API URL
+2. Replace localStorage methods with fetch calls
+3. Use async/await for all CRUD operations
+4. Handle errors appropriately
+
+Example API integration is shown in the React Native taskApi.js file.
+
+
+==================================================
+ADDITIONAL FEATURES YOU CAN ADD
+==================================================
+
+1. User Authentication - JWT-based login system
+2. Push Notifications - Remind users of upcoming tasks
+3. Task Priorities - High, Medium, Low priority levels
+4. Recurring Tasks - Daily, weekly, monthly repeats
+5. Task Search - Full-text search across tasks
+6. Dark Mode - Theme toggle
+7. Data Export - CSV/JSON export
+8. Calendar View - Visual calendar representation
+9. Task Sharing - Collaborate with other users
+10. Analytics Dashboard - Task statistics and insights
+
+
+==================================================
+END OF DOCUMENT
+==================================================
+
+This complete application provides a full-featured scheduling assistant with:
+- Web frontend with HTML, CSS, JavaScript
+- Java Spring Boot REST API backend
+- React Native mobile app
+- Full CRUD operations
+- Task filtering and categorization
+- Responsive design
+
+You can start with any component and integrate others as needed!
